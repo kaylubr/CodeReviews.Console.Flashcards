@@ -16,4 +16,16 @@ public static class StackController
     {
         return StackService.GetAll();
     }
+
+    public static bool GetById(int id)
+    {
+        return StackService.GetById(id);
+    }
+
+    public static bool UpdateNameById(int id, string name)
+    {
+        string cleanedName = Helper.Capitalize(name.Trim());
+        return StackService.UpdateNameById(id, cleanedName);
+    }
+
 }
