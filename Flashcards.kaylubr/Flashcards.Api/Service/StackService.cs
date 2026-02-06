@@ -9,12 +9,20 @@ internal static class StackService
 {
     private static readonly string _connectionString = DatabaseConfigs.ConnectionString;
 
-    internal static void Create(string name)
+    internal static bool Create(string name)
     {
-        using var connection = new SqlConnection(_connectionString);
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
 
-        var sqlQuery = "INSERT INTO flashcard_db (Name) VALUES (@name)";
-        connection.Execute(sqlQuery, new { name });
+            var sqlQuery = "INSERT INTO stacks (Name) VALUES (@name)";
+            connection.Execute(sqlQuery, new { name });
+            return true;
+        }
+        catch (SqlException)
+        {
+            return false;
+        }
     }
 
     internal static List<Stack> GetAll()

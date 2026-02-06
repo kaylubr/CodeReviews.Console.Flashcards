@@ -11,16 +11,14 @@ public static class StackUi
         switch (choice)
         {
             case "View All Stacks":
-                ViewAllStacks();
+                ViewAllStacksOperation();
                 break;
             case "Create A Stack":
-                ViewAllStacks();
+                CreateStackOperation();
                 break;
             case "Edit Stack Name":
-                ViewAllStacks();
                 break;
             case "Delete Stack":
-                ViewAllStacks();
                 break;
             case "Go Back Menu":
                 return;
@@ -33,11 +31,11 @@ public static class StackUi
         AnsiConsole.Clear();
         return AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title("Select [bold]Operation[/]:")
+                .Title("[yellow bold]Manage Stacks[/]")
                 .AddChoices("View All Stacks", "Create A Stack", "Edit Stack Name", "Delete Stack", "Go Back Menu"));
     }
 
-    private static void ViewAllStacks()
+    private static void ViewAllStacksOperation()
     {
         var stackList = StackController.GetAll();
 
@@ -58,5 +56,25 @@ public static class StackUi
 
         AnsiConsole.Write("\nPress any key to continue...");
         Console.ReadKey();
+    }
+
+    private static void CreateStackOperation()
+    {
+        bool success = false;
+        while (!success)
+        {
+            string newStackName = AnsiConsole.Ask<string>("What would you like to name the stack? (Duplicates are invalid): ");
+
+            if (StackController.CreateStack(newStackName))
+            {
+                AnsiConsole.MarkupLine("\n[green]Successfully created a new stack![/]");
+                AnsiConsole.Markup("Press any key to continue..");
+                Console.ReadKey();
+                return;
+            }
+            else
+                AnsiConsole.MarkupLine("\n[red]Invalid! Name already exists.[/]\n");
+        }
+
     }
 }

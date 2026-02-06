@@ -6,10 +6,10 @@ namespace Flashcards.Api.Controllers;
 
 public static class StackController
 {
-    public static void CreateStack(string name)
+    public static bool CreateStack(string name)
     {
         string cleanedName = Helper.Capitalize(name.Trim());
-        StackService.Create(cleanedName);
+        return StackService.Create(cleanedName);
     }
 
     public static List<Stack> GetAll()
