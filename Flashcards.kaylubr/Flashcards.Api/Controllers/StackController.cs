@@ -28,4 +28,10 @@ public static class StackController
         return StackService.UpdateNameById(id, cleanedName);
     }
 
+    public static bool DeleteById(int id)
+    {
+        return StackService.DeleteById(id);
+    }
+
+
 }

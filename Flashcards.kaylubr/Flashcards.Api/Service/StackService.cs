@@ -40,18 +40,14 @@ internal static class StackService
         try
         {
             var sqlQuery = "SELECT * FROM stacks WHERE Id = @id";
-            Stack stack = connection.QuerySingle<Stack>(sqlQuery, new { id });
-
-            if (stack == null)
-                return false;
-
-            return true;
+            connection.QuerySingle<Stack>(sqlQuery, new { id });
         }
         catch
         {
             return false;
         }
 
+        return true;
     }
 
     internal static bool UpdateNameById(int id, string name)
@@ -63,11 +59,31 @@ internal static class StackService
             var sqlQuery = "UPDATE stacks SET Name = @name WHERE Id = @id";
             connection.Execute(sqlQuery, new { name, id });
         }
-        catch (SqlException)
+        catch
         {
             return false;
         }
 
         return true;
     }
+
+    internal static bool DeleteById(int id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+
+        try
+        {
+            var sqlQuery = "DELETE FROM stacks WHERE Id = @id";
+
+            if (connection.Execute(sqlQuery, new { id }) == 0)
+                return false;
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 }

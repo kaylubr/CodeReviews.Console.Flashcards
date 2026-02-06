@@ -1,6 +1,5 @@
 using Spectre.Console;
 using Flashcards.Api.Controllers;
-using Flashcards.Api.Models;
 
 namespace Flashcards.Api.Views;
 
@@ -21,6 +20,7 @@ public static class StackUi
                 EditStackOperation();
                 break;
             case "Delete Stack":
+                DeleteStackOperation();
                 break;
             case "Go Back Menu":
                 return;
@@ -55,7 +55,7 @@ public static class StackUi
             if (StackController.CreateStack(newStackName))
             {
                 AnsiConsole.MarkupLine("\n[green]Successfully created a new stack![/]");
-                AnsiConsole.Markup("Press any key to continue..");
+                AnsiConsole.Markup("\nPress any key to continue..");
                 Console.ReadKey();
                 return;
             }
@@ -89,14 +89,37 @@ public static class StackUi
             if (StackController.UpdateNameById(id, newStackName))
             {
                 AnsiConsole.MarkupLine("\n[green]Successfully edited stack name![/]");
-                AnsiConsole.Markup("Press any key to continue..");
+                AnsiConsole.Markup("\nPress any key to continue..");
                 Console.ReadKey();
                 return;
             }
             else
                 AnsiConsole.MarkupLine("\n[red]Invalid! Name already exists.[/]\n");
         }
+    }
 
+    private static void DeleteStackOperation()
+    {
+        RenderStacksInTable(withId: true);
+
+        int id;
+        while (true)
+        {
+            id = AnsiConsole.Ask<int>("\nEnter Stack ID to Delete: ");
+
+            bool stackExists = StackController.DeleteById(id);
+
+            if (stackExists)
+            {
+                AnsiConsole.MarkupLine("\n[green]Successfully deleted![/]");
+                AnsiConsole.Markup("\nPress any key to continue..");
+                Console.ReadKey();
+                break;
+            }
+
+            if (AnsiConsole.Ask<int>("\n[red]Invalid! Stack with that ID doesn't exists. Type [bold]0[/] to go back:[/]") == 0)
+                return;
+        }
     }
 
     private static void RenderStacksInTable(bool withId = false)
