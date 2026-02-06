@@ -15,7 +15,5 @@ public static class DatabaseConfigs
 
         ConnectionString = builder.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is missing.");
-
-        Console.WriteLine(ConnectionString);
     }
 }
